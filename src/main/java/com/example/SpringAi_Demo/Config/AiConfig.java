@@ -2,28 +2,28 @@ package com.example.SpringAi_Demo.Config;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
-import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
-import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.memory.MessageWindowChatMemory;
-import org.springframework.ai.chat.memory.repository.jdbc.JdbcChatMemoryRepository;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+//import org.springframework.ai.chat.client.ChatClient;
+//import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+//import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
+//import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+//import org.springframework.ai.chat.memory.ChatMemory;
+//import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+//import org.springframework.ai.chat.memory.repository.jdbc.JdbcChatMemoryRepository;
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
 
-@Configuration
-public class AiConfig {
+//@Configuration
+//public class AiConfig {
 	
-	@Bean
-	ChatMemory increaseOrDecreaseMaxMessageStoreInDB(JdbcChatMemoryRepository repo) {
-		return MessageWindowChatMemory.builder()
-				.chatMemoryRepository(repo)
-				.maxMessages(1000000000)
-				.build();
-	}
+//	@Bean
+//	ChatMemory increaseOrDecreaseMaxMessageStoreInDB(JdbcChatMemoryRepository repo) {
+//		return MessageWindowChatMemory.builder()
+//				.chatMemoryRepository(repo)
+//				.maxMessages(1000000000)
+//				.build();
+//	}
 
 	//private Logger logger = LoggerFactory.getLogger(AiConfig.class);
 
@@ -43,11 +43,11 @@ public class AiConfig {
                 .build();
     }*/
 	
-	@Bean
-    ChatClient chatClient(ChatClient.Builder builder, ChatMemory chatMemory) {
-        MessageChatMemoryAdvisor messageChatMemoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
-        return builder
-                .defaultAdvisors(messageChatMemoryAdvisor)
-                .build();
-    }
-}
+//	@Bean
+//    ChatClient chatClient(ChatClient.Builder builder, ChatMemory chatMemory) {
+//        MessageChatMemoryAdvisor messageChatMemoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
+//        return builder
+//                .defaultAdvisors(messageChatMemoryAdvisor)
+//                .build();
+//    }
+//}

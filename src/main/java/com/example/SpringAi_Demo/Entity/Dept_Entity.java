@@ -1,30 +1,37 @@
 package com.example.SpringAi_Demo.Entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "role_dummy")
+@Table(name = "role_table")
 public class Dept_Entity {
 
 	@Id
-	private long role_id;
-	private String role_name; 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "role_id")
+	private long roleId;
+	@Column(name = "role_name")
+	private String roleName; 
 	private String description;
-	private int dept_id;
+	@Column(name = "dept_id")
+	private int deptId;
 	
-	public long getRole_id() {
-		return role_id;
+	public long getRoleId() {
+		return roleId;
 	}
-	public void setRole_id(long role_id) {
-		this.role_id = role_id;
+	public void setRoleId(long roleId) {
+		this.roleId = roleId;
 	}
-	public String getRole_name() {
-		return role_name;
+	public String getRoleName() {
+		return roleName;
 	}
-	public void setRole_name(String role_name) {
-		this.role_name = role_name;
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
 	}
 	public String getDescription() {
 		return description;
@@ -32,15 +39,15 @@ public class Dept_Entity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public int getDept_id() {
-		return dept_id;
+	public int getDeptId() {
+		return deptId;
 	}
-	public void setDept_id(int dept_id) {
-		this.dept_id = dept_id;
+	public void setDeptId(int deptId) {
+		this.deptId = deptId;
 	}
 	@Override
 	public String toString() {
-		return "Dept_Entity [role_id=" + role_id + ", role_name=" + role_name + ", description=" + description
-				+ ", dept_id=" + dept_id + "]";
+		return "Dept_Entity [roleId=" + roleId + ", roleName=" + roleName + ", description=" + description + ", deptId="
+				+ deptId + "]";
 	}
 }

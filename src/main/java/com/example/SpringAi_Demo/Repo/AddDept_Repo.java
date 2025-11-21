@@ -13,7 +13,7 @@ public interface AddDept_Repo extends JpaRepository<Dept_Entity, Long>{
 
 	@Query(nativeQuery = true, value = """
 			
-			select * from role_dummy order by role_id desc;
+			select * from role_table order by role_id desc;
 			
 			""")
 	List<Dept_Entity> getListData();

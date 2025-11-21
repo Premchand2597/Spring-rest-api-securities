@@ -2,25 +2,25 @@ package com.example.SpringAi_Demo.controller;
 
 import java.io.IOException;
 
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.image.ImageResponse;
-//import org.springframework.ai.ollama.OllamaChatModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+//import org.springframework.ai.chat.client.ChatClient;
+//import org.springframework.ai.image.ImageResponse;
+////import org.springframework.ai.ollama.OllamaChatModel;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.web.bind.annotation.CrossOrigin;
+//import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.PathVariable;
+//import org.springframework.web.bind.annotation.RequestParam;
+//import org.springframework.web.bind.annotation.RestController;
+//
+//import com.example.SpringAi_Demo.Service.ChatImpl;
+//
+//import jakarta.servlet.http.HttpServletResponse;
+//import reactor.core.publisher.Flux;
 
-import com.example.SpringAi_Demo.Service.ChatImpl;
-
-import jakarta.servlet.http.HttpServletResponse;
-import reactor.core.publisher.Flux;
-
-@RestController
+/*@RestController
 @CrossOrigin(origins = "http://192.168.1.66:3000")
-public class chatController {
+public class chatController { */
 
 	/*private ChatClient chatClient;
 
@@ -55,7 +55,7 @@ public class chatController {
 		return ResponseEntity.ok(content);
 	}*/
 	
-	@Autowired
+/*	@Autowired
 	private ChatImpl chatImpl;
 
 	@GetMapping("/stream-chat/{uid}")
@@ -71,4 +71,4 @@ public class chatController {
 		res.sendRedirect(imageURL);
 	}
 	
-}
+}*/
