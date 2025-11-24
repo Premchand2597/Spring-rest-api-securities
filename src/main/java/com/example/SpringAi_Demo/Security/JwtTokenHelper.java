@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -12,17 +13,25 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 
 @Component
 public class JwtTokenHelper {
 
 	// Token validity = 5 hours
-	private static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60 * 1000;
+	@Value("${security.jwt.access-ttl-seconds}")
+	private long JWT_TOKEN_VALIDITY;
+	
+	@Value("${security.jwt.secret}")
+	private String JWT_SECRET;
+	
+	private SecretKey secretKey;
 
 	// Must be 256-bit key
-	private final SecretKey secretKey = Keys.hmacShaKeyFor(
-	    "ThisIsA512BitSecretKeyForJwtSigningAndValidation12345678901234567890".getBytes()
-	);
+	@PostConstruct
+    public void init() {
+        this.secretKey = Keys.hmacShaKeyFor(JWT_SECRET.getBytes());
+    }
 	
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
@@ -66,7 +75,7 @@ public class JwtTokenHelper {
         return Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date(now))
-                .expiration(new Date(now + JWT_TOKEN_VALIDITY))
+                .expiration(new Date(now + JWT_TOKEN_VALIDITY * 1000))
                 .signWith(secretKey, Jwts.SIG.HS512)
                 .compact();
     }
