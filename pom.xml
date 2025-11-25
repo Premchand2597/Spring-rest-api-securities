@@ -64,11 +64,12 @@
         </dependency>-->
         
         <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
-		<dependency>
+		<!--<dependency>
 		    <groupId>io.jsonwebtoken</groupId>
 		    <artifactId>jjwt</artifactId>
 		    <version>0.13.0</version>
-		</dependency>
+		</dependency>-->
+		
 		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
 		<dependency>
 		    <groupId>io.jsonwebtoken</groupId>

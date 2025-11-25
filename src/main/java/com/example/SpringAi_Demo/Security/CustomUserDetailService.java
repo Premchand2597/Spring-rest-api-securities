@@ -20,7 +20,7 @@ public class CustomUserDetailService implements UserDetailsService{
 		//get the user details from DB using username
 		Login fetchedDetails = null;
 		try {
-			fetchedDetails = loginRepo.findByUsername(username);
+			fetchedDetails = loginRepo.findByEmail(username);
 		} catch (Exception e) {
 			System.out.println(e);
 		}

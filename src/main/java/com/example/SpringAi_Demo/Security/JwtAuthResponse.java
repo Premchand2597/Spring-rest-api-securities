@@ -1,20 +1,16 @@
 package com.example.SpringAi_Demo.Security;
 
-public class JwtAuthResponse {
+import com.example.SpringAi_Demo.Entity.Login;
 
-	private String token;
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-	@Override
-	public String toString() {
-		return "JwtAuthResponse [token=" + token + "]";
+public record JwtAuthResponse(String accessToken, String refreshToken, long expiresIn, String tokenType, Login user) {
+	
+	public static JwtAuthResponse customResponse(String accessToken, String refreshToken, long expiresIn, Login user)
+	{
+		return new JwtAuthResponse(accessToken, refreshToken, expiresIn, "Bearer", user);
+		
 	}
 	
 }
+
+	
+	

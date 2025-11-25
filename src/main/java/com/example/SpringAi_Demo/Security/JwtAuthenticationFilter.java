@@ -1,6 +1,9 @@
 package com.example.SpringAi_Demo.Security;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +16,12 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.example.SpringAi_Demo.Entity.Login;
+import com.example.SpringAi_Demo.Repo.LoginRepo;
+
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -30,6 +38,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
     @Autowired
     private UserDetailsService userDetailsService;
+    
+    @Autowired
+    private LoginRepo loginRepo;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -44,14 +55,45 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         String requestHeader = request.getHeader("Authorization");
         //Bearer 2352345235sdfrsfgsdfsdf
         logger.info(" Header :  {}", requestHeader);
-        String username = null;
         String token = null;
         if (requestHeader != null && requestHeader.startsWith("Bearer")) {
             //looking good
             token = requestHeader.substring(7);
+            
+            // Check for access token
+        	if(!jwtHelper.isAccessToken(token)) {
+        		filterChain.doFilter(request, response);
+        		return;
+        	}
+            
             try {
 
-                username = this.jwtHelper.getUsernameFromToken(token);
+            	Jws<Claims> parsed = this.jwtHelper.parse(token);
+            	Claims payload = parsed.getPayload();
+
+            	// Extract user ID
+            	String userId = payload.getSubject();
+            	int id = Integer.parseInt(userId);
+
+            	// Fetch user
+            	Optional<Login> userOpt = loginRepo.findById(id);
+
+            	userOpt.ifPresent(user -> {
+            	    UserDetails userDetails = this.userDetailsService.loadUserByUsername(user.getEmail());
+
+            	    UsernamePasswordAuthenticationToken authentication =
+            	            new UsernamePasswordAuthenticationToken(
+            	                    userDetails,
+            	                    null,
+            	                    userDetails.getAuthorities()
+            	            );
+
+            	    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+            	    if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            	        SecurityContextHolder.getContext().setAuthentication(authentication);
+            	    }
+            	});
 
             } catch (IllegalArgumentException e) {
                 logger.info("Illegal Argument while fetching the username !!");
@@ -73,7 +115,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         }
 
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        /*if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
 
             //fetch user detail from username
@@ -92,7 +134,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             }
 
 
-        }
+        }*/
 
         filterChain.doFilter(request, response);
 

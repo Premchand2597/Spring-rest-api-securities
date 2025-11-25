@@ -21,21 +21,24 @@ public class Login implements UserDetails{
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	private String username;
+	private int id;
+	private String email;
 	private String password;
 	private String role;
-	public long getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	public String getPassword() {
 		return password;
@@ -49,17 +52,21 @@ public class Login implements UserDetails{
 	public void setRole(String role) {
 		this.role = role;
 	}
-	@Override
+    @Override
 	public String toString() {
-		return "Login [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + "]";
+		return "Login [id=" + id + ", email=" + email + ", password=" + password + ", role=" + role + "]";
 	}
-
-	
+    
+    
     // ----- UserDetails interface Methods -----
 
-    @Override
+	@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(role));
         // return list like: ["ROLE_ADMIN"]
     }
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
 }

@@ -1,25 +1,140 @@
 package com.example.SpringAi_Demo.Security;
 
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.Date;
-import java.util.function.Function;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import com.example.SpringAi_Demo.Entity.Login;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 
-@Component
+@Service
 public class JwtTokenHelper {
+	
+	private SecretKey key;
+	private long accessTTLSeconds;
+	private long refreshTTLSeconds;
+	private String issuer;
+	
+	public SecretKey getKey() {
+		return key;
+	}
+
+	public void setKey(SecretKey key) {
+		this.key = key;
+	}
+
+	public long getAccessTTLSeconds() {
+		return accessTTLSeconds;
+	}
+
+	public void setAccessTTLSeconds(long accessTTLSeconds) {
+		this.accessTTLSeconds = accessTTLSeconds;
+	}
+
+	public long getRefreshTTLSeconds() {
+		return refreshTTLSeconds;
+	}
+
+	public void setRefreshTTLSeconds(long refreshTTLSeconds) {
+		this.refreshTTLSeconds = refreshTTLSeconds;
+	}
+
+	public String getIssuer() {
+		return issuer;
+	}
+
+	public void setIssuer(String issuer) {
+		this.issuer = issuer;
+	}
+
+	public JwtTokenHelper(
+							@Value("${security.jwt.secret}") String key, 
+							@Value("${security.jwt.access-ttl-seconds}") long accessTTLSeconds, 
+							@Value("${security.jwt.refresh-ttl-seconds}") long refreshTTLSeconds, 
+							@Value("${security.jwt.issuer}") String issuer
+						) {
+		this.key = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
+		this.accessTTLSeconds = accessTTLSeconds;
+		this.refreshTTLSeconds = refreshTTLSeconds;
+		this.issuer = issuer;
+	}
+
+	// Generate Token
+	public String generateAccessToken(Login user) {
+		Instant now = Instant.now();
+		return Jwts.builder()
+				.id(UUID.randomUUID().toString())
+				.subject(String.valueOf(user.getId()))
+				.issuer(issuer)
+				.issuedAt(Date.from(now))
+				.expiration(Date.from(now.plusSeconds(accessTTLSeconds)))
+				.claims(Map.of(
+						"email", user.getEmail(),
+						"roles", user.getRole(),
+						"typ", "access"
+				))
+				.signWith(key, SignatureAlgorithm.HS512)
+				.compact();
+	}
+	
+	// Generate Refresh Token
+	public String generateRefreshToken(Login user, String jti) {
+		Instant now = Instant.now();
+		return Jwts.builder()
+				.id(jti)
+				.subject(String.valueOf(user.getId()))
+				.issuer(issuer)
+				.issuedAt(Date.from(now))
+				.expiration(Date.from(now.plusSeconds(refreshTTLSeconds)))
+				.claim("typ", "refresh")
+				.signWith(key, SignatureAlgorithm.HS512)
+				.compact();
+	}
+	
+	
+	// Parse the token
+	public Jws<Claims> parse(String token){
+		return Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
+	}
+	
+	public boolean isAccessToken(String token) {
+		Claims c = parse(token).getPayload();
+		return "access".equals(c.get("typ"));
+	}
+	
+	public boolean isRefreshToken(String token) {
+		Claims c = parse(token).getPayload();
+		return "refresh".equals(c.get("typ"));
+	}
+	
+	public UUID getUserId(String token) {
+		Claims c = parse(token).getPayload();
+		return UUID.fromString(c.getSubject());
+	}
+	
+	public String getJti(String token) {
+		return parse(token).getPayload().getId();
+	}
+	
+	
+	
+	
+
 
 	// Token validity = 5 hours
-	@Value("${security.jwt.access-ttl-seconds}")
+	/*@Value("${security.jwt.access-ttl-seconds}")
 	private long JWT_TOKEN_VALIDITY;
 	
 	@Value("${security.jwt.secret}")
@@ -86,5 +201,5 @@ public class JwtTokenHelper {
                 userDetails.getUsername().equals(getUsernameFromToken(token)) &&
                 !isTokenExpired(token)
             );
-    }
+    }*/
 }

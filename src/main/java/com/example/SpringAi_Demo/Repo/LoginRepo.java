@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.example.SpringAi_Demo.Entity.Login;
 
 @Repository
-public interface LoginRepo extends JpaRepository<Login, Long>{
-	Login findByUsername(String username);
+public interface LoginRepo extends JpaRepository<Login, Integer>{
+	Login findByEmail(String email);
 }

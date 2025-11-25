@@ -17,7 +17,7 @@ public class LoginService {
 	private PasswordEncoder passwordEncoder;
 
 	public boolean getUserNameAndPasswordLoginData(Login log) {
-		Login fetchedData = loginRepo.findByUsername(log.getUsername());
+		Login fetchedData = loginRepo.findByEmail(log.getEmail());
 		if(fetchedData != null) {
 			return log.getPassword().equals(fetchedData.getPassword());
 		}
