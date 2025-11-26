@@ -50,7 +50,7 @@ public class AuthController {
     public ResponseEntity<JwtAuthResponse> login(@RequestBody JwtAuthRequest request) {
 
         Authentication authenticate = authenticate(request.getEmail(), request.getPassword());
-        //UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+        // UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
         Login user = loginRepo.findByEmail(request.getEmail());
         // Generate Token
         String token = helper.generateAccessToken(user				);
@@ -59,7 +59,6 @@ public class AuthController {
 //        response.setToken(token);
         
         JwtAuthResponse response = JwtAuthResponse.customResponse(token, "", helper.getAccessTTLSeconds(), user);
-
         return ResponseEntity.ok(response);
     }
 

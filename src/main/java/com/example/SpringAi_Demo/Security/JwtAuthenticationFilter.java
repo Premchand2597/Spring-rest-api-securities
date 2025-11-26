@@ -68,8 +68,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             
             try {
 
-            	Jws<Claims> parsed = this.jwtHelper.parse(token);
-            	Claims payload = parsed.getPayload();
+            	Jws<Claims> parsedToken = this.jwtHelper.parse(token);
+            	Claims payload = parsedToken.getPayload();
 
             	// Extract user ID
             	String userId = payload.getSubject();

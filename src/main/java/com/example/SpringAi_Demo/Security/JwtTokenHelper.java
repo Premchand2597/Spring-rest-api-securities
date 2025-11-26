@@ -85,7 +85,8 @@ public class JwtTokenHelper {
 						"roles", user.getRole(),
 						"typ", "access"
 				))
-				.signWith(key, SignatureAlgorithm.HS512)
+//				.signWith(key, SignatureAlgorithm.HS512) // Deprecated
+				.signWith(key)
 				.compact();
 	}
 	
@@ -99,7 +100,8 @@ public class JwtTokenHelper {
 				.issuedAt(Date.from(now))
 				.expiration(Date.from(now.plusSeconds(refreshTTLSeconds)))
 				.claim("typ", "refresh")
-				.signWith(key, SignatureAlgorithm.HS512)
+//				.signWith(key, SignatureAlgorithm.HS512) // Deprecated
+				.signWith(key)
 				.compact();
 	}
 	
