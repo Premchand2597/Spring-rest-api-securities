@@ -16,7 +16,6 @@ import com.example.SpringAi_Demo.Entity.Login;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 @Service
@@ -121,9 +120,9 @@ public class JwtTokenHelper {
 		return "refresh".equals(c.get("typ"));
 	}
 	
-	public UUID getUserId(String token) {
+	public int getUserId(String token) {
 		Claims c = parse(token).getPayload();
-		return UUID.fromString(c.getSubject());
+		return Integer.parseInt(c.getSubject());
 	}
 	
 	public String getJti(String token) {
