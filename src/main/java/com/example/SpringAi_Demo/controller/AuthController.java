@@ -53,7 +53,7 @@ public class AuthController {
         // UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
         Login user = loginRepo.findByEmail(request.getEmail());
         // Generate Token
-        String token = helper.generateAccessToken(user				);
+        String token = helper.generateAccessToken(user);
 
 //        JwtAuthResponse response = new JwtAuthResponse();
 //        response.setToken(token);

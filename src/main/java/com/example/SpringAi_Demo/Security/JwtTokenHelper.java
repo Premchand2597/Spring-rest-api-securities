@@ -65,7 +65,7 @@ public class JwtTokenHelper {
 							@Value("${security.jwt.refresh-ttl-seconds}") long refreshTTLSeconds, 
 							@Value("${security.jwt.issuer}") String issuer
 						) {
-		this.key = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
+		this.key = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8)); //header
 		this.accessTTLSeconds = accessTTLSeconds;
 		this.refreshTTLSeconds = refreshTTLSeconds;
 		this.issuer = issuer;
@@ -86,7 +86,7 @@ public class JwtTokenHelper {
 						"typ", "access"
 				))
 //				.signWith(key, SignatureAlgorithm.HS512) // Deprecated
-				.signWith(key)
+				.signWith(key) //custom Secret key
 				.compact();
 	}
 	
